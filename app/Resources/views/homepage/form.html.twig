@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div id="welcome">
+        <h1>Form demo</h1>
+        {{ form_start(frmProfile) }}
+        {{ form_widget(frmProfile) }}
+        {{ form_end(frmProfile) }}
+    </div>
+{% endblock %}
