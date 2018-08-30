@@ -5,7 +5,7 @@
         <h1 class="pb-3  mt-4 font-italic">List posts</h1>
         <ul class="list-group list-group-flush">
             {% for post in postData %}
-                <li class="list-group-item"><a href="{{ path('posts_detail', {id: post._id}) }}">{{ post.title }}</a></li>
+                <li class="list-group-item"><a href="{{ path('post_detail', {id: post.id}) }}">{{ post.title }}</a></li>
             {% endfor %}
         </ul>
     </div>

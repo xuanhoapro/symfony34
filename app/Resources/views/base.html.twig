@@ -26,8 +26,8 @@
                 <li class="nav-item{% if app.request.get('_route') == 'form' %} active{% endif %}">
                     <a class="nav-link" href="{{ path('form') }}">Form</a>
                 </li>
-                <li class="nav-item{% if app.request.get('_route') == 'posts' %} active{% endif %}">
-                    <a class="nav-link" href="{{ path('posts') }}">Posts</a>
+                <li class="nav-item{% if app.request.get('_route') == 'post' %} active{% endif %}">
+                    <a class="nav-link" href="{{ path('post') }}">Posts</a>
                 </li>
             </ul>
         </div>
