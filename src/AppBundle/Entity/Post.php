@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Post
@@ -27,6 +28,11 @@ class Post
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=150)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      max = 150,
+     *      maxMessage = "Your title cannot be longer than {{ limit }} characters"
+     * )
      */
     private $title;
 
@@ -34,6 +40,7 @@ class Post
      * @var string
      *
      * @ORM\Column(name="content", type="text")
+     * @Assert\NotBlank()
      */
     private $content;
 
@@ -142,7 +149,7 @@ class Post
      */
     public function setTag($tag)
     {
-        $this->tag = $tag;
+        $this->tag = serialize(explode(',', $tag));
 
         return $this;
     }

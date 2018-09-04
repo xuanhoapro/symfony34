@@ -11,19 +11,25 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Post;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PostController extends Controller
 {
     private $postData;
+
     public function __construct()
     {
         $this->init();
     }
+
     private function init()
     {
-        $content = file_get_contents(__DIR__.'./../../../data/posts.json');
+        $content        = file_get_contents(__DIR__ . './../../../data/posts.json');
         $this->postData = json_decode($content, true);
     }
 
@@ -33,6 +39,7 @@ class PostController extends Controller
     public function listAction(Request $request)
     {
         $postData = $this->getDoctrine()->getRepository(Post::class)->findAll();
+
         return $this->render('post/list.html.twig', [
             'postData' => $postData
         ]);
@@ -44,9 +51,9 @@ class PostController extends Controller
     public function detailAction(Request $request, $id)
     {
         $post = $this->getDoctrine()->getRepository(Post::class)->find($id);
-        if (!$post) {
+        if ( ! $post) {
             throw $this->createNotFoundException(
-                'No post found for id '.$id
+                'No post found for id ' . $id
             );
         }
 
@@ -62,24 +69,94 @@ class PostController extends Controller
     {
         $postData = $this->getDoctrine()->getRepository(Post::class)->findAll();
         if (empty($postData)) {
+            $entityManager = $this->getDoctrine()->getManager();
             foreach ($this->postData as $data) {
-                $entityManager = $this->getDoctrine()->getManager();
-
                 $post = new Post();
                 $post->setTitle($data['title']);
                 $post->setContent($data['content']);
                 $post->setPicture($data['picture']);
-                $post->setTag(serialize($data['tags']));
+                $post->setTag(($data['tags']));
 
                 // tells Doctrine you want to (eventually) save the Product (no queries yet)
                 $entityManager->persist($post);
-
-                // actually executes the queries (i.e. the INSERT query)
-                $entityManager->flush();
             }
-            die('===INSERT===');
+            // actually executes the queries (i.e. the INSERT query)
+            $entityManager->flush();
         }
 
-        die('--Stop--');
+        return new Response('OK');
+
+    }
+
+    /**
+     * @Route("/post/{id}/edit", methods={"GET", "POST"}, name="post_edit")
+     */
+    public function editAction(Request $request, Post $post)
+    {
+        if ( ! $post) {
+            throw $this->createNotFoundException(
+                'No post found for id ' . $request->get('id')
+            );
+        }
+
+        $frmPost = $this->createFormBuilder($post)
+                        ->add('title', TextType::class)
+                        ->add('content', TextareaType::class, [
+                            'attr' => ['rows' => 12],
+                        ])
+                        ->add('tag', TextType::class, [
+                            'data' => implode(',', $post->getTag())
+                        ])
+                        ->add('save', SubmitType::class, array('label' => 'Submit'))
+                        ->getForm();
+
+        $frmPost->handleRequest($request);
+
+        if ($frmPost->isSubmitted() && $frmPost->isValid()) {
+
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'Post updated successfully!');
+            return $this->redirectToRoute('post');
+        }
+
+        return $this->render('post/edit.html.twig', [
+            'post'    => $post,
+            'frmPost' => $frmPost->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/post/create", methods={"GET", "POST"}, name="post_create")
+     *
+     * @return Response
+     */
+    public function createAction(Request $request)
+    {
+        $post    = new Post();
+        $frmPost = $this->createFormBuilder($post)
+                        ->add('title', TextType::class)
+                        ->add('content', TextareaType::class, [
+                            'attr' => ['rows' => 12],
+                        ])
+                        ->add('tag', TextType::class)
+                        ->add('save', SubmitType::class, array('label' => 'Submit'))
+                        ->getForm();
+
+        $frmPost->handleRequest($request);
+
+        if ($frmPost->isSubmitted() && $frmPost->isValid()) {
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($post);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Post created successfully!');
+            return $this->redirectToRoute('post');
+        }
+
+        return $this->render('post/create.html.twig', [
+            'frmPost' => $frmPost->createView(),
+        ]);
     }
 }

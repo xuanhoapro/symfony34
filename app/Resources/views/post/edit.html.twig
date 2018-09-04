@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="add-post mt-4">
+        <h2 class="pb-3">Edit post #{{ post.getId() }}</h2>
+
+        {{ form_start(frmPost, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_widget(frmPost) }}
+        {{ form_end(frmPost) }}
+
+    </div>
+{% endblock %}

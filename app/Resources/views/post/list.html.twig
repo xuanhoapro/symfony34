@@ -2,11 +2,41 @@
 
 {% block content %}
     <div id="list-posts">
-        <h1 class="pb-3  mt-4 font-italic">List posts</h1>
-        <ul class="list-group list-group-flush">
+        <h1 class="pb-3  mt-4 font-italic">List post</h1>
+        <hr>
+
+        {{ include('_flash_message.html.twig') }}
+
+        <a class="btn btn-primary mb-5" href="{{ path('post_create') }}"><i class="fa fa-plus"></i>  Add</a>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Create date</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
             {% for post in postData %}
-                <li class="list-group-item"><a href="{{ path('post_detail', {id: post.id}) }}">{{ post.title }}</a></li>
+                <tr>
+                    <th scope="row">{{ post.getId() }}</th>
+                    <td>{{ post.getTitle() }}</td>
+                    <td>{{ post.getCreatedAt() | date("F jS \\a\\t g:ia") }}</td>
+                    <td class="text-right">
+                        <div class="item-actions">
+                            <a href="{{ path('post_detail', {id: post.id}) }}" class="btn btn-sm btn-success">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </a>
+
+                            <a href="{{ path('post_edit', {id: post.id}) }}" class="btn btn-sm btn-primary">
+                                <i class="fa fa-edit" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
             {% endfor %}
-        </ul>
+            </tbody>
+        </table>
     </div>
 {% endblock %}

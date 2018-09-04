@@ -8,7 +8,7 @@
             <span class="metadata"><i class="fa fa-calendar"></i> {{ post.getCreatedAt() | date("F jS \\a\\t g:ia") }}</span>
         </p>
 
-        {{ post.content }}
+        {{ post.content | raw | nl2br }}
 
         {% if post.getTag() %}
             <p class="post-tags mt-3">
