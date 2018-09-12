@@ -10,9 +10,9 @@
 
         {{ post.content | raw | nl2br }}
 
-        {% if post.getTag() %}
+        {% if post.getTag(true) %}
             <p class="post-tags mt-3">
-                {% for tag in post.getTag() %}
+                {% for tag in post.getTag(true) %}
                     <span class="badge badge-secondary">{{ tag }}</span>&nbsp;
                 {% endfor %}
             </p>

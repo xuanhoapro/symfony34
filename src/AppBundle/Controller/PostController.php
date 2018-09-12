@@ -10,6 +10,7 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\Entity\Post;
+use AppBundle\Form\PostType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -99,16 +100,7 @@ class PostController extends Controller
             );
         }
 
-        $frmPost = $this->createFormBuilder($post)
-                        ->add('title', TextType::class)
-                        ->add('content', TextareaType::class, [
-                            'attr' => ['rows' => 12],
-                        ])
-                        ->add('tag', TextType::class, [
-                            'data' => implode(',', $post->getTag())
-                        ])
-                        ->add('save', SubmitType::class, array('label' => 'Submit'))
-                        ->getForm();
+        $frmPost = $this->createForm(PostType::class, $post);
 
         $frmPost->handleRequest($request);
 
@@ -134,14 +126,7 @@ class PostController extends Controller
     public function createAction(Request $request)
     {
         $post    = new Post();
-        $frmPost = $this->createFormBuilder($post)
-                        ->add('title', TextType::class)
-                        ->add('content', TextareaType::class, [
-                            'attr' => ['rows' => 12],
-                        ])
-                        ->add('tag', TextType::class)
-                        ->add('save', SubmitType::class, array('label' => 'Submit'))
-                        ->getForm();
+        $frmPost = $this->createForm(PostType::class, $post);
 
         $frmPost->handleRequest($request);
 
