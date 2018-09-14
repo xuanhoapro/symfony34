@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="add-post mt-4">
+        <h2 class="pb-3">Edit category #{{ category.getId() }}</h2>
+
+        {{ form_start(frmCategory, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_widget(frmCategory) }}
+        {{ form_end(frmCategory) }}
+
+    </div>
+{% endblock %}

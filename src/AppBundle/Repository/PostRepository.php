@@ -10,4 +10,12 @@ namespace AppBundle\Repository;
  */
 class PostRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getLatest()
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+                             ->addSelect('p', 'c')
+                             ->leftJoin('p.category', 'c');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

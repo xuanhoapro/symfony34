@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <article class="post mt-4">
+        <h2 class="pb-3">{{ category.name }}</h2>
+
+        <p class="post-metadata">
+            <span class="metadata"><i
+                        class="fa fa-calendar"></i> {{ category.getCreatedAt() | date("F jS \\a\\t g:ia") }}</span>
+        </p>
+
+        <div>
+            {{ category.description  | raw | nl2br }}
+        </div>
+
+        <div class="list-post mt-5">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Create date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if category.getPosts().toArray() %}
+                    {% for post in category.getPosts().toArray() %}
+                        <tr>
+                            <th scope="row">{{ post.getId() }}</th>
+                            <td>{{ post.getTitle() }}</td>
+                            <td>{{ post.getCreatedAt() | date("F jS \\a\\t g:ia") }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+    </article>
+{% endblock %}

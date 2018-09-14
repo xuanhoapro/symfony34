@@ -12,9 +12,6 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Post;
 use AppBundle\Form\PostType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,7 +36,7 @@ class PostController extends Controller
      */
     public function listAction(Request $request)
     {
-        $postData = $this->getDoctrine()->getRepository(Post::class)->findAll();
+        $postData = $this->getDoctrine()->getRepository(Post::class)->getLatest();
 
         return $this->render('post/list.html.twig', [
             'postData' => $postData
@@ -109,6 +106,7 @@ class PostController extends Controller
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'Post updated successfully!');
+
             return $this->redirectToRoute('post');
         }
 
@@ -137,6 +135,7 @@ class PostController extends Controller
             $entityManager->flush();
 
             $this->addFlash('success', 'Post created successfully!');
+
             return $this->redirectToRoute('post');
         }
 

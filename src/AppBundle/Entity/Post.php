@@ -26,6 +26,14 @@ class Post
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="posts")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     *
+     * @Assert\NotBlank()
+     */
+    private $category;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=150)
@@ -170,5 +178,23 @@ class Post
         }
         return $arrReturn ? unserialize($this->tag) : implode(',', unserialize($this->tag));
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    }
+
+
 }
 

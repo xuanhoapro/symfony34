@@ -1,37 +1,34 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div id="list-posts">
-        <h1 class="pb-3  mt-4 font-italic">List post</h1>
+    <div id="list-categorys">
+        <h1 class="pb-3  mt-4 font-italic">List category</h1>
         <hr>
 
         {{ include('_flash_message.html.twig') }}
 
-        <a class="btn btn-primary mb-5" href="{{ path('post_create') }}"><i class="fa fa-plus"></i> Add</a>
+        <a class="btn btn-primary mb-5" href="{{ path('category_create') }}"><i class="fa fa-plus"></i>  Add</a>
         <table class="table table-striped">
             <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Title</th>
-                <th scope="col">Category</th>
+                <th scope="col">Name</th>
                 <th scope="col">Create date</th>
                 <th scope="col">Action</th>
             </tr>
             </thead>
             <tbody>
-            {% for post in postData %}
+            {% for category in categoryData %}
                 <tr>
-                    <th scope="row">{{ post.getId() }}</th>
-                    <td>{{ post.getTitle() }}</td>
-                    <td>{{ post.getCategory().getName() }}</td>
-                    <td>{{ post.getCreatedAt() | date("F jS \\a\\t g:ia") }}</td>
+                    <th scope="row">{{ category.getId() }}</th>
+                    <td>{{ category.getName() }}</td>
+                    <td>{{ category.getCreatedAt() | date("F jS \\a\\t g:ia") }}</td>
                     <td class="text-right">
                         <div class="item-actions">
-                            <a href="{{ path('post_detail', {id: post.id}) }}" class="btn btn-sm btn-success">
+                            <a href="{{ path('category_detail', {id: category.id}) }}" class="btn btn-sm btn-success">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                             </a>
-
-                            <a href="{{ path('post_edit', {id: post.id}) }}" class="btn btn-sm btn-primary">
+                            <a href="{{ path('category_edit', {id: category.id}) }}" class="btn btn-sm btn-primary">
                                 <i class="fa fa-edit" aria-hidden="true"></i>
                             </a>
                         </div>
